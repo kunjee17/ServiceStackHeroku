@@ -38,6 +38,7 @@ let main args =
     let port = if env_port = null then "1234" else env_port
     let hostname = "servicestackheroku"
     let host = "http://" + hostname + ".herokuapp.com:" + port
+//    let host1 = "http://localhost:8080/"
     printfn "listening on %s ..." host
     let appHost = new AppHost()
     appHost.Init()
