@@ -34,11 +34,13 @@ type AppHost() =
 
 [<EntryPoint>]
 let main args = 
-    let host = if args.Length = 0 then "http://*:8080/" else args.[0]
+    let env_port = Environment.GetEnvironmentVariable("PORT")
+    let port = if env_port = null then "1234" else env_port
+    let hostname = "servicestackheroku"
+    let host = "http://" + hostname + ".herokuapp.com:" + port
     printfn "listening on %s ..." host
     let appHost = new AppHost()
     appHost.Init()
     appHost.Start host
-    Console.ReadLine() |> ignore
+    while true do Console.ReadLine() |> ignore
     0
-
