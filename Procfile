@@ -1,0 +1,1 @@
+web: mono appdir/bin/Debug/app.exe
