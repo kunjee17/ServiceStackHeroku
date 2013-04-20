@@ -1,1 +1,1 @@
-web: mono appdir/bin/Debug/app.exe
+web: mono appdir/bin/Debug/ServiceStackHeroku.exe
