@@ -25,8 +25,7 @@ type Hello() =
     interface IReturn<HelloResponse>
     member val Name = "" with get, set
 
-[<ClientCanSwapTemplates>]
-[<DefaultView("Hello")>]    
+//[<DefaultView("Hello")>]    
 type HelloService() =
     inherit Service()
     member this.Any (request:Hello) = 
@@ -36,7 +35,7 @@ type HelloService() =
 type AppHost() = 
     inherit AppHostHttpListenerBase ("Hello F# Service", typeof<HelloService>.Assembly)
     override this.Configure container = 
-        this.Plugins.Add(new Razor.RazorFormat())
+        //this.Plugins.Add(new Razor.RazorFormat())
         ignore()
     
 

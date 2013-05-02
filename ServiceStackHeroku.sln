@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "ServiceStackHeroku", "ServiceStackHeroku\ServiceStackHeroku.fsproj", "{324115FF-3B96-4639-AAFE-D56D9477514D}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ServiceStackHeroku", "ServiceStackHeroku\ServiceStackHeroku.fsproj", "{324115FF-3B96-4639-AAFE-D56D9477514D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +13,9 @@ Global
 		{324115FF-3B96-4639-AAFE-D56D9477514D}.Debug|x86.Build.0 = Debug|x86
 		{324115FF-3B96-4639-AAFE-D56D9477514D}.Release|x86.ActiveCfg = Release|x86
 		{324115FF-3B96-4639-AAFE-D56D9477514D}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = ServiceStackHeroku\ServiceStackHeroku.fsproj
