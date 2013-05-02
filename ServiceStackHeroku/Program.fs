@@ -6,20 +6,27 @@
 module ServiceStackHeroku.Main
 
 open System
+open System.Net
 open ServiceStack
 open ServiceStack.ServiceInterface
 open ServiceStack.ServiceHost
 open ServiceStack.WebHost.Endpoints
+open ServiceStack.Razor
+open Funq
+open ServiceStack.Text
 
 [<CLIMutable>]
 type HelloResponse = { Result:string }
 
 [<Route("/hello")>]
 [<Route("/hello/{name}")>]
+
 type Hello() =
     interface IReturn<HelloResponse>
     member val Name = "" with get, set
-    
+
+[<ClientCanSwapTemplates>]
+[<DefaultView("Hello")>]    
 type HelloService() =
     inherit Service()
     member this.Any (request:Hello) = 
@@ -28,7 +35,9 @@ type HelloService() =
         
 type AppHost() = 
     inherit AppHostHttpListenerBase ("Hello F# Service", typeof<HelloService>.Assembly)
-    override this.Configure container = ignore()
+    override this.Configure container = 
+        this.Plugins.Add(new Razor.RazorFormat())
+        ignore()
     
 
 
@@ -37,8 +46,8 @@ let main args =
     let env_port = Environment.GetEnvironmentVariable("PORT")
     let port = if env_port = null then "1234" else env_port
     let hostname = "servicestackheroku"
-    let host = "http://" + hostname + ".herokuapp.com:" + port + "/"
-//    let host = "http://localhost:8080/"
+//    let host = "http://" + hostname + ".herokuapp.com:" + port + "/"
+    let host = "http://localhost:8080/"
     printfn "listening on %s ..." host
     let appHost = new AppHost()
     appHost.Init()
