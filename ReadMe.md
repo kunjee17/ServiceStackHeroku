@@ -1,7 +1,7 @@
 # ServiceStack with FSharp on Heroku#
 
 
-Here is simple example of Running Serivcestack with FSharp. Application hosted on heroku.
+Here is simple example of Running Serivcestack with FSharp. Application hosted on [heroku](http://servicestackheroku.herokuapp.com/).
 
 Reference for [Servicestack](http://www.servicestack.net/) you can found out on given link. 
 
