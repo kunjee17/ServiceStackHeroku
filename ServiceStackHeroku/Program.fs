@@ -14,6 +14,8 @@ open ServiceStack.WebHost.Endpoints
 open ServiceStack.Razor
 open Funq
 open ServiceStack.Text
+open ServiceStack.Logging
+open ServiceStack.Logging.Support.Logging
 
 [<CLIMutable>]
 type HelloResponse = { Result:string }
@@ -25,7 +27,7 @@ type Hello() =
     interface IReturn<HelloResponse>
     member val Name = "" with get, set
 
-//[<DefaultView("Hello")>]    
+[<DefaultView("Hello")>]    
 type HelloService() =
     inherit Service()
     member this.Any (request:Hello) = 
@@ -35,13 +37,14 @@ type HelloService() =
 type AppHost() = 
     inherit AppHostHttpListenerBase ("Hello F# Service", typeof<HelloService>.Assembly)
     override this.Configure container = 
-        //this.Plugins.Add(new Razor.RazorFormat())
+        this.Plugins.Add(new RazorFormat())
         ignore()
     
 
 
 [<EntryPoint>]
 let main args = 
+    LogManager.LogFactory <- new ConsoleLogFactory()
     let env_port = Environment.GetEnvironmentVariable("PORT")
     let port = if env_port = null then "1234" else env_port
     let hostname = "servicestackheroku"
