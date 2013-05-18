@@ -17,6 +17,20 @@ open ServiceStack.Text
 open ServiceStack.Logging
 open ServiceStack.Logging.Support.Logging
 
+
+type Rockstar(Id : int, firstName:string, lastName: string, age:int, alive:bool) = 
+     member val Id = Id  with get, set
+     member val firstName = firstName with get, set
+     member val lastName = lastName with get, set
+     member val age = age with get, set
+     member val alive = alive with get, set
+
+
+     new () = 
+        new Rockstar(0,"","",0,true)
+
+
+
 [<CLIMutable>]
 type HelloResponse = { Result:string }
 
@@ -36,11 +50,26 @@ type HelloService() =
         
 type AppHost() = 
     inherit AppHostHttpListenerBase ("Hello F# Service", typeof<HelloService>.Assembly)
+    
+    static let seedData: Rockstar [] = 
+        [|new Rockstar(1, "Jimi", "Hendrix", 27, false); 
+            new Rockstar(2, "Janis", "Joplin", 27, false); 
+            new Rockstar(4, "Kurt", "Cobain", 27, false);             
+            new Rockstar(5, "Elvis", "Presley", 42, false); 
+            new Rockstar(6, "Michael", "Jackson", 50, false); 
+            new Rockstar(7, "Eddie", "Vedder", 47, true);
+            new Rockstar(8, "Dave", "Grohl", 43, true); 
+            new Rockstar(9, "Courtney", "Love", 48, true); 
+            new Rockstar(10, "Bruce", "Springsteen", 62, true) |]
+     
     override this.Configure container = 
         this.Plugins.Add(new RazorFormat())
         ignore()
     
+     
+    
 
+    
 
 [<EntryPoint>]
 let main args = 
