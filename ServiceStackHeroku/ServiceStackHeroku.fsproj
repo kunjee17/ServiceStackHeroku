@@ -233,6 +233,7 @@
     <None Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Test.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
