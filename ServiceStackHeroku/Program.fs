@@ -43,41 +43,41 @@ type HelloService() =
 //This is neat feature. I need to call parameter based constructor first to use 
 //member val and then I can give default. So, I dont have to think for default 
 //constructor but I have to think about it.
-type Rockstar(Id : int, firstName:string, lastName: string, age:int, alive:bool, url:string) = 
+type Rockstar(Id : int, firstName:string, lastName: string, age:int, alive:bool) = 
      member val Id = Id  with get, set
      member val FirstName = firstName with get, set
      member val LastName = lastName with get, set
      member val Age = age with get, set
      member val Alive = alive with get, set
-     member val Url = url with get, set
-//     member this.Url =  "/stars/{0}/{1}".Fmt(match this.Alive with  
-//                                                | true -> "alive"
-//                                                | false -> "dead"
-//        , this.LastName.ToLower())    
+//     member val Url = url with get, set
+     member this.Url =  "/stars/{0}/{1}".Fmt(match this.Alive with  
+                                                | true -> "alive"
+                                                | false -> "dead"
+        , this.LastName.ToLower())    
      
      new () = 
-        new Rockstar(0,"","",0,true,"")
+        new Rockstar(0,"","",0,true)
         
         
 type AppHost() = 
     inherit AppHostHttpListenerBase ("Hello F# Service", typeof<HelloService>.Assembly)
     
-    static member createUrl (alive:bool, lastname:string) = 
-        AppHost.Instance.Config.WebHostUrl + "/stars/{0}/{1}".Fmt(match alive with  
-                                                                        | true -> "alive"
-                                                                        | false -> "dead"
-                                                                        , lastname.ToLower()); 
+ //   static member createUrl (alive:bool, lastname:string) = 
+//        AppHost.Instance.Config.WebHostUrl + "/stars/{0}/{1}".Fmt(match alive with  
+//                                                                        | true -> "alive"
+//                                                                        | false -> "dead"
+//                                                                        , lastname.ToLower()); 
 
-    static member SeedData: Rockstar [] = 
-        [|new Rockstar(1, "Jimi", "Hendrix", 27, false, AppHost.createUrl(false,"Hendrix"));
-            new Rockstar(2, "Janis", "Joplin", 27, false,AppHost.createUrl(false,"Joplin")); 
-            new Rockstar(4, "Kurt", "Cobain", 27, false,AppHost.createUrl(false,"Cobain"));             
-            new Rockstar(5, "Elvis", "Presley", 42, false,AppHost.createUrl(false,"Presley")); 
-            new Rockstar(6, "Michael", "Jackson", 50, false,AppHost.createUrl(false,"Jackson")); 
-            new Rockstar(7, "Eddie", "Vedder", 47, true,AppHost.createUrl(true,"Vedder"));
-            new Rockstar(8, "Dave", "Grohl", 43, true,AppHost.createUrl(true,"Grohl")); 
-            new Rockstar(9, "Courtney", "Love", 48, true,AppHost.createUrl(true,"Love")); 
-            new Rockstar(10, "Bruce", "Springsteen", 62, true,AppHost.createUrl(true,"Springsteen")) |]
+    static member SeedData: Rockstar [] =
+        [|new Rockstar(1, "Jimi", "Hendrix", 27, false);
+            new Rockstar(2, "Janis", "Joplin", 27, false); 
+            new Rockstar(4, "Kurt", "Cobain", 27, false);             
+            new Rockstar(5, "Elvis", "Presley", 42, false); 
+            new Rockstar(6, "Michael", "Jackson", 50, false); 
+            new Rockstar(7, "Eddie", "Vedder", 47, true);
+            new Rockstar(8, "Dave", "Grohl", 43, true); 
+            new Rockstar(9, "Courtney", "Love", 48, true); 
+            new Rockstar(10, "Bruce", "Springsteen", 62, true) |]
      
     override this.Configure container = 
         this.Plugins.Add(new RazorFormat())
