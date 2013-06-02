@@ -4,8 +4,8 @@
 // framework to .NET 4.0 or .NET 4.5.
 
 module ServiceStackHeroku.Main
-
 open System
+open System.Collections.Generic
 open System.Net
 open ServiceStack
 open ServiceStack.ServiceInterface
@@ -17,21 +17,9 @@ open ServiceStack.Text
 open ServiceStack.Logging
 open ServiceStack.Logging.Support.Logging
 open ServiceStack.OrmLite
-open ServiceStack.OrmLite.Sqlite
 
-//This is neat feature. I need to call parameter based constructor first to use 
-//member val and then I can give default. So, I dont have to think for default 
-//constructor but I have to think about it.
-type Rockstar(Id : int, firstName:string, lastName: string, age:int, alive:bool) = 
-     member val Id = Id  with get, set
-     member val firstName = firstName with get, set
-     member val lastName = lastName with get, set
-     member val age = age with get, set
-     member val alive = alive with get, set
+//open ServiceStack.OrmLite.Sqlite
 
-
-     new () = 
-        new Rockstar(0,"","",0,true)
 
 
 //I can't but CLI can mutate this one
@@ -50,6 +38,24 @@ type HelloService() =
     inherit Service()
     member this.Any (request:Hello) = 
         {Result = "Hello" + request.Name}
+
+
+//This is neat feature. I need to call parameter based constructor first to use 
+//member val and then I can give default. So, I dont have to think for default 
+//constructor but I have to think about it.
+type Rockstar(Id : int, firstName:string, lastName: string, age:int, alive:bool) = 
+     member val Id = Id  with get, set
+     member val FirstName = firstName with get, set
+     member val LastName = lastName with get, set
+     member val Age = age with get, set
+     member val Alive = alive with get, set
+     member this.Url = "/stars/{0}/{1}".Fmt(match this.Alive with  
+                                                | true -> "alive"
+                                                | false -> "dead"
+        , this.LastName.ToLower())    
+     
+     new () = 
+        new Rockstar(0,"","",0,true)
         
         
 type AppHost() = 
@@ -68,13 +74,15 @@ type AppHost() =
      
     override this.Configure container = 
         this.Plugins.Add(new RazorFormat())
-        container.Register<IDbConnectionFactory>(
-            new OrmLiteConnectionFactory(":memory:", false, SqliteDialect.Provider));
+        //commented as sqlite dll will not work on linux as dll
+//        container.Register<IDbConnectionFactory>(
+//            new OrmLiteConnectionFactory(":memory:", false, SqliteDialect.Provider));
 
         //Nice implementation of using. No more curly braces to give the end
-        use db = container.Resolve<IDbConnectionFactory>().OpenDbConnection()
-        db.CreateTableIfNotExists<Rockstar>();
-        db.InsertAll(AppHost.SeedData); 
+        //commented as sqlite dll will not work on linux as dll
+//        use db = container.Resolve<IDbConnectionFactory>().OpenDbConnection()
+//        db.CreateTableIfNotExists<Rockstar>();
+//        db.InsertAll(AppHost.SeedData); 
 
         //TODO unable to convert this to F#, do the needful after words
         //SetConfig(new EndpointHostConfig {
@@ -85,7 +93,10 @@ type AppHost() =
 
         ignore()
     
-//Rockstars Defined Here     
+
+
+
+        //Rockstars Defined Here     
 [<Route("/rockstars")>]
 [<Route("/rockstars/{Id}")>]
 [<Route("/rockstars/aged/{Age}")>]
@@ -108,7 +119,7 @@ type ResetRockstars() =
 
 //TODO aged is nullable implement some none of it
 [<Csv(CsvBehavior.FirstEnumerable)>]
-type RockstarsResponse(Aged:int, Total:int, Results:Collections.Generic.List<Rockstar>) =
+type RockstarsResponse(Aged:int, Total:int, Results: List<Rockstar>) =
     member val Total = Total with get, set
     member val Aged = Aged with get, set
     member val Results = Results with get, set 
@@ -119,22 +130,33 @@ type RockStarService() =
     inherit Service()
 
     member this.Get(request:Rockstars) = 
-        new RockstarsResponse(request.Age, this.Db.Scalar<int>("select count(*) from Rockstar"),
-            this.Db.Select<Rockstar>() 
+        let rockstarReturn = new List<Rockstar>()
+        rockstarReturn.AddRange(AppHost.SeedData)
+        let returnResult = match request.Id with 
+                                | 0 -> match request.Age with 
+                                       | 0 -> rockstarReturn //return all
+                                       | _ -> rockstarReturn.FindAll(fun e -> e.Age = request.Age)
+                                | _ -> rockstarReturn.FindAll(fun e -> e.Id = request.Id)
+        new RockstarsResponse(request.Age, AppHost.SeedData.Length,
+            returnResult
         )
 
     member this.Any(request:DeleteRockStar) = 
-        this.Db.DeleteById<Rockstar>(request.Id)
+        //commented as sqlite dll will not work on linux as dll
+        //this.Db.DeleteById<Rockstar>(request.Id)
         this.Get(new Rockstars())
 
     member this.Post(request: Rockstar) =
-        this.Db.Insert(request)
+        //commented as sqlite dll will not work on linux as dll
+        //this.Db.Insert(request)
         this.Get(new Rockstars())
 
     member this.Any(request: ResetRockstars) = 
-        this.Db.DropAndCreateTable<Rockstar>()
-        this.Db.InsertAll(AppHost.SeedData)
+        //commented as sqlite dll will not work on linux as dll
+        //this.Db.DropAndCreateTable<Rockstar>()
+        //this.Db.InsertAll(AppHost.SeedData)
         this.Get(new Rockstars())
+
 
 
 [<EntryPoint>]
