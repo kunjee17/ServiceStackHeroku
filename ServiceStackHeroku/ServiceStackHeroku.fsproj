@@ -239,7 +239,6 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="ServiceStack">
       <HintPath>..\packages\ServiceStack.3.9.48\lib\net35\ServiceStack.dll</HintPath>
@@ -283,5 +282,6 @@
     <Reference Include="System.Web.Razor.Unofficial">
       <HintPath>..\packages\System.Web.Razor.Unofficial.2.0.2\lib\net40\System.Web.Razor.Unofficial.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
 </Project>
