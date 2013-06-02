@@ -57,6 +57,7 @@
         @foreach (var rockstar in Model.Results)
         {
             <tr>
+                <td><text>@rockstar.Url</text></td>
                 <td><a href="@rockstar.Url">@rockstar.FirstName @rockstar.LastName</a></td>
                 <td><a href="/rockstars/aged/@rockstar.Age">@rockstar.Age</a></td>     
                 <td><a href="/rockstars/delete/@rockstar.Id">delete</a></td>       

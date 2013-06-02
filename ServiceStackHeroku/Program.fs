@@ -81,6 +81,7 @@ type AppHost() =
      
     override this.Configure container = 
         this.Plugins.Add(new RazorFormat())
+        this.Config.WebHostUrl <- "http://servicestackheroku.herokuapp.com"
         //commented as sqlite dll will not work on linux as dll
 //        container.Register<IDbConnectionFactory>(
 //            new OrmLiteConnectionFactory(":memory:", false, SqliteDialect.Provider));
